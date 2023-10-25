@@ -23,25 +23,27 @@ for label, content in df.items():
         stringColumns.append(label)
 
 
-# ----------- model declarations ---------------------
-le = LabelEncoder()
-
-
 # -------------------- methods -----------------------
+
+def create_encoders():
+    encoders = {}
+    for i, col in enumerate(stringColumns):
+        encoders[i] = LabelEncoder()
+    return encoders
 
 # Encode the string values to make them useable with the ML models
 # param: dataframe, returns: the new encoded dataframe
 def encode(df):
-    # encode the string columns
-    for col in stringColumns:
-        df[col] = le.fit_transform(df[col])
+    # create the encoders, and encode the string columns
+    for i, col in enumerate(stringColumns):
+        df[col] = encoders[i].fit_transform(df[col])
     return df
 
 
 def decode(df):
     # decode the string columns
-    for col in stringColumns:
-        df[col] = le.inverse_transform(df[col])
+    for i, col in enumerate(stringColumns):
+        df[col] = encoders[i].inverse_transform(df[col])
     return df
 
 # Displays correlation matrix data 
@@ -58,16 +60,10 @@ def correlation_matrix(column):
     plt.show()
 
 
-# model = LogisticRegression(solver='liblinear', max_iter=1000)
+# ----------- model declarations ---------------------
 
-        
-print("datatypes: \n", df.dtypes, "\n\n")
-
-# Decode the string values
-# for col in stringColumns:
-#         df[col] = le.inverse_transform(df[col])
-        
-# print("datatypes after decoding: \n", df.dtypes, "\n\n")
+# declare dictionary of our encoders
+encoders = create_encoders()
 
 
 
@@ -83,7 +79,6 @@ df.info()
 df = decode(df)
 print('after decoding: ')
 df.info()
-
 
 
 # print("Number of missing values in each column:")

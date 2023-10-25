@@ -25,6 +25,7 @@ for label, content in df.items():
 
 # -------------------- methods -----------------------
 
+# returns dict of encoders
 def create_encoders():
     encoders = {}
     for i, col in enumerate(stringColumns):
@@ -46,7 +47,7 @@ def decode(df):
         df[col] = encoders[i].inverse_transform(df[col])
     return df
 
-# Displays correlation matrix data 
+# Displays correlation matrix data. Dataframe must be encoded beforehand.
 # Calculates the correlation between the specified column and all input variables
 # param: string column name
 def correlation_matrix(column):
@@ -69,17 +70,16 @@ encoders = create_encoders()
 
 # ---------------------------- MAIN ------------------------------------------
 
-print('before encoding: ')
+# print('before encoding: ')
 df.info()
-
 df = encode(df)
-print('after encoding: ')
-df.info()
+# print('after encoding: ')
+# df.info()
+# df = decode(df)
+# print('after decoding: ')
+# df.info()
 
-df = decode(df)
-print('after decoding: ')
-df.info()
-
+correlation_matrix('valence')
 
 # print("Number of missing values in each column:")
 # print(df.isnull().sum())
